@@ -1,17 +1,36 @@
-.. Pydenticon documentation master file, created by
-   sphinx-quickstart on Mon Nov 25 23:13:33 2013.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Pydenticon documentation
+========================
 
-Welcome to Pydenticon's documentation!
-======================================
+Pydenticon is a small utility library that can be used for deterministically
+generating identicons based on the hash of provided data.
+
+The implementation is a port of the Sigil identicon implementation from:
+
+* https://github.com/cupcake/sigil/
+
+Support
+-------
+
+In case of problems with the library, please do not hestitate to contact the
+author at **pydenticon (at) majic.rs**. The library itself is hosted on Github,
+and on author's own websitea:
+
+* https://github.com/azaghal/pydenticon
+* https://code.majic.rs/pydenticon
+* https://projects.majic.rs/pydenticon
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-
+   about
+   installation
+   usage
+   algorithm
+   security
+   apireference
+   releasenotes
 
 Indices and tables
 ==================
