@@ -1,0 +1,4 @@
+*.pyc
+*~
+tmp/
+docs/_build/
