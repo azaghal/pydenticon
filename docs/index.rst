@@ -28,7 +28,7 @@ Contents:
    installation
    usage
    algorithm
-   security
+   privacy
    apireference
    releasenotes
 
