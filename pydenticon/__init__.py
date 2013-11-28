@@ -226,8 +226,8 @@ class Generator(object):
                     # Set-up the coordinates for a block.
                     x1 = padding[2] + column * block_width
                     y1 = padding[0] + row * block_height
-                    x2 = padding[2] + (column + 1) * block_width
-                    y2 = padding[0] + (row + 1) * block_height
+                    x2 = padding[2] + (column + 1) * block_width - 1
+                    y2 = padding[0] + (row + 1) * block_height - 1
 
                     # Draw the rectangle.
                     draw.rectangle((x1, y1, x2, y2), fill=foreground)
