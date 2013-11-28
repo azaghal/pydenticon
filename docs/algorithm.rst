@@ -126,6 +126,13 @@ the symmetry. This would result in the following ideticon matrix::
 Since no inversion was requested, ``1`` would correspond to calculated
 foreground colour, while ``0`` would correspond to provided background colour.
 
+To spicen the example up a bit, here is what the above identicon would look like
+in regular and inverted variant (with some sample foreground colours and a bit
+of padding):
+
+.. image:: images/branko.png
+.. image:: images/branko_inverted.png
+
 Limitations
 -----------
 

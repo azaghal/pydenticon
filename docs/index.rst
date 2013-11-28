@@ -1,6 +1,9 @@
 Pydenticon documentation
 ========================
 
+.. image:: images/pydenticon.png
+.. image:: images/pydenticon_inverted.png
+
 Pydenticon is a small utility library that can be used for deterministically
 generating identicons based on the hash of provided data.
 
