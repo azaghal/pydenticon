@@ -16,7 +16,7 @@ Support
 
 In case of problems with the library, please do not hestitate to contact the
 author at **pydenticon (at) majic.rs**. The library itself is hosted on Github,
-and on author's own websitea:
+and on author's own websites:
 
 * https://github.com/azaghal/pydenticon
 * https://code.majic.rs/pydenticon
