@@ -168,7 +168,8 @@ class Generator(object):
         # could be a hex digest already.
         if len(data) / 2 == self.digest_entropy / 8:
             try:
-                digest = data.decode("hex")
+                data.decode("hex")
+                digest = data
             except TypeError:
                 digest = self.digest(data).hexdigest()
         else:
