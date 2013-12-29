@@ -3,7 +3,7 @@ from setuptools import setup
 
 README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 INSTALL_REQUIREMENTS = ["Pillow"]
-TEST_REQUIREMENTS = []
+TEST_REQUIREMENTS = ["mock"]
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -21,6 +21,7 @@ setup(
     author_email='branko@majic.rs',
     install_requires=INSTALL_REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
+    test_suite="tests",
     classifiers=[
         'Environment :: Other Environment',
         'Environment :: Web Environment',
