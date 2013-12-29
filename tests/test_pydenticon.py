@@ -6,6 +6,7 @@ from io import BytesIO
 # Third-party Python library imports.
 import mock
 import PIL
+import PIL.ImageChops
 
 # Library imports.
 from pydenticon import Generator
@@ -333,6 +334,66 @@ class GeneratorTest(unittest.TestCase):
         data = "some other test data"
         generator.generate(data, 200, 200)
         generate_png_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, foreground[5], background)
+
+    def test_generate_png_compare(self):
+        """
+        Tests generated PNG identicon against a set of pre-generated samples.
+        """
+
+        # Set-up a list of foreground colours (taken from Sigil). Same as used
+        # for reference images.
+        foreground = ["rgb(45,79,255)",
+                      "rgb(254,180,44)",
+                      "rgb(226,121,234)",
+                      "rgb(30,179,253)",
+                      "rgb(232,77,65)",
+                      "rgb(49,203,115)",
+                      "rgb(141,69,170)"]
+
+        # Set-up a background colour (taken from Sigil). Same as used for
+        # reference images.
+        background = "rgb(224,224,224)"
+
+        # Set-up parameters equivalent as used for samples.
+        width = 200
+        height = 200
+        padding = (20, 20, 20, 20)
+
+        # Load the reference images, making sure they're in RGB mode.
+        test1_ref = PIL.Image.open("tests/samples/test1.png").convert(mode="RGB")
+        test2_ref = PIL.Image.open("tests/samples/test2.png").convert(mode="RGB")
+        test3_ref = PIL.Image.open("tests/samples/test3.png").convert(mode="RGB")
+
+        # Set-up the Generator.
+        generator = Generator(5, 5, foreground=foreground, background=background)
+
+        # Generate first test identicon.
+        raw_image = generator.generate("test1", width, height, padding=padding)
+        image_stream = BytesIO(raw_image)
+        test1 = PIL.Image.open(image_stream)
+
+        # Generate second test identicon.
+        raw_image = generator.generate("test2", width, height, padding=padding)
+        image_stream = BytesIO(raw_image)
+        test2 = PIL.Image.open(image_stream)
+
+        # Generate third test identicon.
+        raw_image = generator.generate("test3", width, height, padding=padding)
+        image_stream = BytesIO(raw_image)
+        test3 = PIL.Image.open(image_stream)
+
+        # Calculate differences between generated identicons and references.
+        diff1 = PIL.ImageChops.difference(test1, test1_ref)
+        diff2 = PIL.ImageChops.difference(test2, test2_ref)
+        diff3 = PIL.ImageChops.difference(test3, test3_ref)
+
+        # Verify that all the diffs are essentially black (i.e. no differences
+        # between generated identicons and reference samples).
+        expected_extrema = ((0, 0), (0, 0), (0, 0))
+
+        self.assertEqual(diff1.getextrema(), expected_extrema)
+        self.assertEqual(diff2.getextrema(), expected_extrema)
+        self.assertEqual(diff3.getextrema(), expected_extrema)
 
 if __name__ == '__main__':
     unittest.main()
