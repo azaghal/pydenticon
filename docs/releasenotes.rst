@@ -1,6 +1,25 @@
 Release Notes
 =============
 
+0.1.1
+-----
+
+This is a very small release feature-wise, with a single bug-fix.
+
+New features:
+
+* `PYD-3: Initial tests <https://projects.majic.rs/pydenticon/issues/PYD-3>`_
+
+  Unit tests covering most of the library functionality.
+
+Bug fixes:
+
+* `PYD-4: Identicon generation using pre-hashed data raises ValueError
+  <https://projects.majic.rs/pydenticon/issues/PYD-4>`_
+
+  Fixed some flawed logic which prevented identicons to be generated from
+  existing hashes.
+
 0.1
 ---
 
