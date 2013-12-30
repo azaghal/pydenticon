@@ -33,6 +33,7 @@ Contents:
    algorithm
    privacy
    apireference
+   testing
    releasenotes
 
 Indices and tables

@@ -5,5 +5,6 @@ include MANIFEST.in
 include README.rst
 include setup.py
 recursive-include pydenticon *.py
+recursive-include tests *.py *.png
 prune docs/_build
 exclude tmp/
