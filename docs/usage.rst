@@ -83,7 +83,7 @@ Finally, the resulting identicons can be in different formats::
                                      output_format="png")
   # Create identicon in ASCII format.
   identicon_ascii = generator.generate("john.doe@example.com", 200, 200,
-                                       output_format="png")
+                                       output_format="ascii")
 
 Using the generated identicons
 ------------------------------
@@ -97,10 +97,10 @@ to achieve::
   identicon_png = generator.generate("john.doe@example.com", 200, 200,
                                      output_format="png")
   identicon_ascii = generator.generate("john.doe@example.com", 200, 200,
-                                       output_format="png")
+                                       output_format="ascii")
 
   # Identicon can be easily saved to a file.
-  f = open("sample.png", "w")
+  f = open("sample.png", "wb")
   f.write(identicon_png)
   f.close()
 
@@ -147,6 +147,6 @@ output them in PNG format to local directory::
                                    output_format="png")
 
     filename = user + ".png"
-    with open(filename, "w") as f:
+    with open(filename, "wb") as f:
         f.write(identicon)
 

@@ -7,6 +7,9 @@ from io import BytesIO
 # Pillow for Image processing.
 from PIL import Image, ImageDraw
 
+# For decoding hex values (works both for Python 2.7.x and Python 3.x).
+import binascii
+
 
 class Generator(object):
     """
@@ -64,8 +67,8 @@ class Generator(object):
 
         # Check if the digest produces sufficient entropy for identicon
         # generation.
-        entropy_provided = len(digest("test").hexdigest()) / 2 * 8
-        entropy_required = (columns / 2 + columns % 2) * rows + 8
+        entropy_provided = len(digest(b"test").hexdigest()) // 2 * 8
+        entropy_required = (columns // 2 + columns % 2) * rows + 8
 
         if entropy_provided < entropy_required:
             raise ValueError("Passed digest '%s' is not capable of providing %d bits of entropy" % (str(digest), entropy_required))
@@ -97,7 +100,7 @@ class Generator(object):
           True if the bit is 1. False if the bit is 0.
         """
 
-        if hash_bytes[n / 8] >> int(8 - ((n % 8) + 1)) & 1 == 1:
+        if hash_bytes[n // 8] >> int(8 - ((n % 8) + 1)) & 1 == 1:
             return True
 
         return False
@@ -119,7 +122,7 @@ class Generator(object):
 
         # Since the identicon needs to be symmetric, we'll need to work on half
         # the columns (rounded-up), and reflect where necessary.
-        half_columns = self.columns / 2 + self.columns % 2
+        half_columns = self.columns // 2 + self.columns % 2
         cells = self.rows * half_columns
 
         # Initialise the matrix (list of rows) that will be returned.
@@ -134,7 +137,7 @@ class Generator(object):
             if self._get_bit(cell, hash_bytes[1:]):
 
                 # Determine the cell coordinates in matrix.
-                column = cell / self.columns
+                column = cell // self.columns
                 row = cell % self.rows
 
                 # Mark the cell and its reflection. Central column may get
@@ -166,14 +169,18 @@ class Generator(object):
 
         # If data seems to provide identical amount of entropy as digest, it
         # could be a hex digest already.
-        if len(data) / 2 == self.digest_entropy / 8:
+        if len(data) // 2 == self.digest_entropy // 8:
             try:
-                data.decode("hex")
-                digest = data
-            except TypeError:
-                digest = self.digest(data).hexdigest()
+                binascii.unhexlify(data.encode('utf-8'))
+                digest = data.encode('utf-8')
+            # Handle Python 2.x exception.
+            except (TypeError):
+                digest = self.digest(data.encode('utf-8')).hexdigest()
+            # Handle Python 3.x exception.
+            except (binascii.Error):
+                digest = self.digest(data.encode('utf-8')).hexdigest()
         else:
-            digest = self.digest(data).hexdigest()
+            digest = self.digest(data.encode('utf-8')).hexdigest()
 
         return [int(digest[i * 2:i * 2 + 2], 16) for i in range(16)]
 
@@ -217,8 +224,8 @@ class Generator(object):
         draw = ImageDraw.Draw(image)
 
         # Calculate the block widht and height.
-        block_width = width / self.columns
-        block_height = height / self.rows
+        block_width = width // self.columns
+        block_height = height // self.rows
 
         # Go through all the elements of a matrix, and draw the rectangles.
         for row, row_columns in enumerate(matrix):
