@@ -1,6 +1,18 @@
 Release Notes
 =============
 
+0.2
+---
+
+A small release that adds support for Python 3 in addition to Python 2.7.
+
+New features:
+
+* `PYD-5: Add support for Python 3.x
+  <https://projects.majic.rs/pydenticon/issues/PYD-5>`_
+
+  Support for Python 3.x, in addition to Python 2.7.
+
 0.1.1
 -----
 
