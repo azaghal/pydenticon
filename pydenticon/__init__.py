@@ -184,11 +184,11 @@ class Generator(object):
 
         return [int(digest[i * 2:i * 2 + 2], 16) for i in range(16)]
 
-    def _generate_png(self, matrix, width, height, padding, foreground, background):
+    def _generate_image(self, matrix, width, height, padding, foreground, background, image_format):
         """
-        Generates an identicon image in the PNG format out of the passed block
-        matrix, with the requested width, height, padding, foreground colour,
-        and background colour.
+        Generates an identicon image in requested image format out of the passed
+        block matrix, with the requested width, height, padding, foreground
+        colour, background colour, and image format.
 
         Arguments:
 
@@ -212,9 +212,12 @@ class Generator(object):
           represented as a string of format supported by the PIL.ImageColor
           module.
 
+          image_format - Format to use for the image. Format needs to be
+          supported by the Pillow library.
+
         Returns:
 
-          Identicon image in PNG format, returned as a byte list.
+          Identicon image in requested format, returned as a byte list.
         """
 
         # Set-up a new image object, setting the background to provided value.
@@ -244,11 +247,14 @@ class Generator(object):
         stream = BytesIO()
 
         # Save the image to stream.
-        image.save(stream, format="png", optimize=True)
+        try:
+            image.save(stream, format=image_format, optimize=True)
+        except KeyError:
+            raise ValueError("Pillow does not support requested image format: %s" % image_format)
         image_raw = stream.getvalue()
         stream.close()
 
-        # Return the resulting PNG.
+        # Return the resulting image.
         return image_raw
 
     def _generate_ascii(self, matrix, foreground, background):
@@ -296,7 +302,8 @@ class Generator(object):
           bottom, left, right.
 
           output_format - Output format of resulting identicon image. Supported
-          formats are: "png", "ascii". Default is "png".
+          formats are anything that is supported by Pillow, plus a special
+          "ascii" mode.
 
           inverted - Specifies whether the block colours should be inverted or
           not. Default is False.
@@ -313,21 +320,19 @@ class Generator(object):
         matrix = self._generate_matrix(digest_byte_list)
 
         # Determine the background and foreground colours.
-        if output_format == "png":
-            background = self.background
-            foreground = self.foreground[digest_byte_list[0] % len(self.foreground)]
-        elif output_format == "ascii":
+        if output_format == "ascii":
             foreground = "+"
             background = "-"
+        else:
+            background = self.background
+            foreground = self.foreground[digest_byte_list[0] % len(self.foreground)]
 
         # Swtich the colours if inverted image was requested.
         if inverted:
             foreground, background = background, foreground
 
         # Generate the identicon in requested format.
-        if output_format == "png":
-            return self._generate_png(matrix, width, height, padding, foreground, background)
         if output_format == "ascii":
             return self._generate_ascii(matrix, foreground, background)
         else:
-            raise ValueError("Unsupported format requested: %s" % output_format)
+            return self._generate_image(matrix, width, height, padding, foreground, background, output_format)

@@ -152,7 +152,7 @@ class GeneratorTest(unittest.TestCase):
         # Verify the expected and actual result are identical.
         self.assertEqual(expected_digest_byte_list, digest_byte_list)
 
-    def test_generate_png_basics(self):
+    def test_generate_image_basics(self):
         """
         Tests some basics about generated PNG identicon image. This includes:
 
@@ -179,7 +179,7 @@ class GeneratorTest(unittest.TestCase):
         generator = Generator(5, 5)
 
         # Generate the raw image.
-        raw_image = generator._generate_png(matrix, width, height, padding, foreground, background)
+        raw_image = generator._generate_image(matrix, width, height, padding, foreground, background, "png")
 
         # Try to load the raw image.
         image_stream = BytesIO(raw_image)
@@ -238,6 +238,18 @@ class GeneratorTest(unittest.TestCase):
         image = PIL.Image.open(image_stream)
         self.assertEqual(image.format, "PNG")
 
+        # Verify that JPEG image is returned when requested.
+        raw_image = generator.generate(data, 200, 200, output_format="jpeg")
+        image_stream = BytesIO(raw_image)
+        image = PIL.Image.open(image_stream)
+        self.assertEqual(image.format, "JPEG")
+
+        # Verify that GIF image is returned when requested.
+        raw_image = generator.generate(data, 200, 200, output_format="gif")
+        image_stream = BytesIO(raw_image)
+        image = PIL.Image.open(image_stream)
+        self.assertEqual(image.format, "GIF")
+
         # Verify that ASCII "image" is returned when requested.
         raw_image = generator.generate(data, 200, 200, output_format="ascii")
         self.assertIsInstance(raw_image, str)
@@ -257,8 +269,8 @@ class GeneratorTest(unittest.TestCase):
         # Verify that an exception is raised in case of unsupported format.
         self.assertRaises(ValueError, generator.generate, data, 200, 200, output_format="invalid")
 
-    @mock.patch.object(Generator, '_generate_png')
-    def test_generate_inverted_png(self, generate_png_mock):
+    @mock.patch.object(Generator, '_generate_image')
+    def test_generate_inverted_png(self, generate_image_mock):
         """
         Tests if the foreground and background are properly inverted when
         generating PNG images.
@@ -276,11 +288,11 @@ class GeneratorTest(unittest.TestCase):
 
         # Verify that colours are picked correctly when no inverstion is requsted.
         generator.generate(data, 200, 200, inverted=False, output_format="png")
-        generate_png_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, foreground, background)
+        generate_image_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, foreground, background, "png")
 
         # Verify that colours are picked correctly when inversion is requsted.
         generator.generate(data, 200, 200, inverted=True, output_format="png")
-        generate_png_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, background, foreground)
+        generate_image_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, background, foreground, "png")
 
     @mock.patch.object(Generator, '_generate_ascii')
     def test_generate_inverted_ascii(self, generate_ascii_mock):
@@ -310,8 +322,8 @@ class GeneratorTest(unittest.TestCase):
         generator.generate(data, 200, 200, inverted=True, output_format="ascii")
         generate_ascii_mock.assert_called_with(mock.ANY, "-", "+")
 
-    @mock.patch.object(Generator, '_generate_png')
-    def test_generate_foreground(self, generate_png_mock):
+    @mock.patch.object(Generator, '_generate_image')
+    def test_generate_foreground(self, generate_image_mock):
         """
         Tests if the foreground colour is picked correctly.
         """
@@ -327,15 +339,15 @@ class GeneratorTest(unittest.TestCase):
         # result in foreground colour of index '1'.
         data = "some test data"
         generator.generate(data, 200, 200)
-        generate_png_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, foreground[1], background)
+        generate_image_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, foreground[1], background, "png")
 
         # The first byte of hex digest should be 149 for this data, which should
         # result in foreground colour of index '5'.
         data = "some other test data"
         generator.generate(data, 200, 200)
-        generate_png_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, foreground[5], background)
+        generate_image_mock.assert_called_with(mock.ANY, mock.ANY, mock.ANY, mock.ANY, foreground[5], background, "png")
 
-    def test_generate_png_compare(self):
+    def test_generate_image_compare(self):
         """
         Tests generated PNG identicon against a set of pre-generated samples.
         """
