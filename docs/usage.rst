@@ -107,6 +107,24 @@ to achieve::
   # ASCII identicon can be printed-out to console directly.
   print identicon_ascii
 
+
+Working with transparency
+-------------------------
+
+.. note::
+   New in version ``0.3``.
+
+If you ever find yourself in need of having a transparent background or
+foreground, you can easily do this using the syntax
+``rgba(224,224,224,0)``. All this does is effectively adding alpha channel to
+selected colour.
+
+The alpha channel value ranges from ``0`` to ``255``, letting you specify how
+much transparency/opaqueness you want. For example, to have it at roughly 50%
+(more like at ``50.2%`` since you can't use fractions), you would simply specify
+value as ``rgba(224,224,224,128)``.
+
+
 Full example
 ------------
 

@@ -218,7 +218,7 @@ class Generator(object):
         """
 
         # Set-up a new image object, setting the background to provided value.
-        image = Image.new("RGB", (width + padding[2] + padding[3], height + padding[0] + padding[1]), background)
+        image = Image.new("RGBA", (width + padding[2] + padding[3], height + padding[0] + padding[1]), background)
 
         # Set-up a draw image (for drawing the blocks).
         draw = ImageDraw.Draw(image)

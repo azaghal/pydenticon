@@ -189,7 +189,7 @@ class GeneratorTest(unittest.TestCase):
         self.assertEqual(image.size[0], 240)
         self.assertEqual(image.size[1], 240)
         self.assertEqual(image.format, "PNG")
-        self.assertEqual(image.mode, "RGB")
+        self.assertEqual(image.mode, "RGBA")
 
     def test_generate_ascii(self):
         """
@@ -359,10 +359,10 @@ class GeneratorTest(unittest.TestCase):
         height = 200
         padding = (20, 20, 20, 20)
 
-        # Load the reference images, making sure they're in RGB mode.
-        test1_ref = PIL.Image.open("tests/samples/test1.png").convert(mode="RGB")
-        test2_ref = PIL.Image.open("tests/samples/test2.png").convert(mode="RGB")
-        test3_ref = PIL.Image.open("tests/samples/test3.png").convert(mode="RGB")
+        # Load the reference images, making sure they're in RGBA mode.
+        test1_ref = PIL.Image.open("tests/samples/test1.png").convert(mode="RGBA")
+        test2_ref = PIL.Image.open("tests/samples/test2.png").convert(mode="RGBA")
+        test3_ref = PIL.Image.open("tests/samples/test3.png").convert(mode="RGBA")
 
         # Set-up the Generator.
         generator = Generator(5, 5, foreground=foreground, background=background)
@@ -389,7 +389,7 @@ class GeneratorTest(unittest.TestCase):
 
         # Verify that all the diffs are essentially black (i.e. no differences
         # between generated identicons and reference samples).
-        expected_extrema = ((0, 0), (0, 0), (0, 0))
+        expected_extrema = ((0, 0), (0, 0), (0, 0), (0, 0))
 
         self.assertEqual(diff1.getextrema(), expected_extrema)
         self.assertEqual(diff2.getextrema(), expected_extrema)
