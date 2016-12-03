@@ -1,6 +1,26 @@
 Release Notes
 =============
 
+0.3
+---
+
+Update introducing support for more output formats and ability to use
+transparency for PNG identicons.
+
+New features:
+
+* `PYD-6: Add support for having transparent backgrounds in identicons
+  <https://projects.majic.rs/pydenticon/issues/PYD-6>`_
+
+  Ability to use alpha-channel specification in PNG identicons to obtain
+  complete or partial transparency. Works for both background and foreground
+  colour.
+
+* `PYD-7: Ability to specify image format
+  <https://projects.majic.rs/pydenticon/issues/PYD-7>`_
+
+  Ability to specify any output format supported by the Pillow library.
+
 0.2
 ---
 
