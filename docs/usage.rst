@@ -85,6 +85,12 @@ Finally, the resulting identicons can be in different formats::
   identicon_ascii = generator.generate("john.doe@example.com", 200, 200,
                                        output_format="ascii")
 
+Supported output formats are dependant on the local Pillow installation. For
+exact list of available formats, have a look at `Pillow documentation
+<https://pillow.readthedocs.io/>`_. The ``ascii`` format is the only format
+explicitly handled by the *Pydenticon* library itself (mainly useful for
+debugging purposes).
+
 Using the generated identicons
 ------------------------------
 
@@ -93,15 +99,21 @@ either to be stored somewhere on disk, or maybe streamed back to the user via
 HTTP response. Since the generate function returns raw data, this is quite easy
 to achieve::
 
-  # Generate same identicon in two different formats.
+  # Generate same identicon in three different formats.
   identicon_png = generator.generate("john.doe@example.com", 200, 200,
                                      output_format="png")
+  identicon_gif = generator.generate("john.doe@example.com", 200, 200,
+                                     output_format="gif")
   identicon_ascii = generator.generate("john.doe@example.com", 200, 200,
                                        output_format="ascii")
 
   # Identicon can be easily saved to a file.
   f = open("sample.png", "wb")
   f.write(identicon_png)
+  f.close()
+
+  f = open("sample.gif", "wb")
+  f.write(identicon_gif)
   f.close()
 
   # ASCII identicon can be printed-out to console directly.
@@ -113,6 +125,10 @@ Working with transparency
 
 .. note::
    New in version ``0.3``.
+
+.. warning::
+   The only output format that properly supports transparency at the moment is
+   ``PNG``. If you are using anything else, transparency will not work.
 
 If you ever find yourself in need of having a transparent background or
 foreground, you can easily do this using the syntax
