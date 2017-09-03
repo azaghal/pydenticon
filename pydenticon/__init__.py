@@ -246,6 +246,9 @@ class Generator(object):
         # Set-up a stream where image will be saved.
         stream = BytesIO()
 
+        if image_format.upper() == "JPEG":
+            image = image.convert(mode="RGB")
+
         # Save the image to stream.
         try:
             image.save(stream, format=image_format, optimize=True)
