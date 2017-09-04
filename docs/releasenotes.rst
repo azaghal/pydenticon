@@ -1,6 +1,16 @@
 Release Notes
 =============
 
+0.3.1
+-----
+
+Minor bug-fixes.
+
+Bug fixes:
+
+* `PYD-8 - Cannot generate identicons in JPEG format when using Pillow >= 4.2.0
+  <https://projects.majic.rs/pydenticon/issues/PYD-8>`_
+
 0.3
 ---
 
